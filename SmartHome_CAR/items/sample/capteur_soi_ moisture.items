@@ -1,0 +1,36 @@
+// เพิ่มจุด Capteur Soi Moisture data
+// Replace XXXX with Capteur device ID
+//
+// 1. Add following line to _capteur.sitemap
+//
+//                Setpoint item=Soi_Moisture_set_point step=0.5 minValue=40 maxValue=80
+//                Text item=Soi_Moisture_sensor label="Soil Moisture Sensor" icon="water" {
+//                Switch item=Chart_Soi_Moisture label="Graph " icon="chart"  mappings=[0="Day", 1="Week", 2="Month", 3="Year"]
+//                Chart item=Soi_Moisture_sensor period=D refresh=30000 visibility=[Chart_Soi_Moisture==0, Chart_Soi_Moisture=="Uninitialized"]
+//                Chart item=Soi_Moisture_sensor period=W refresh=30000 visibility=[Chart_Soi_Moisture==1]
+//                Chart item=Soi_Moisture_sensor period=M refresh=30000 visibility=[Chart_Soi_Moisture==2]
+//                Chart item=Soi_Moisture_sensor period=Y refresh=30000 visibility=[Chart_Soi_Moisture==3]
+//                      }
+//                      
+// 2. edit soi_moisture.rules to calibate sensor
+// 3. edit file /etc/openhab2/persistence/rrd4j.persist add the following line to create chart 
+// 
+// 				Strategies {
+//    					everyMinute : "0 * * * * ?" // for rrd charts, we need a cron strategy
+// 				}
+// 				Items {
+//     				Soi_Moisture_sensor : strategy = everyChange, everyMinute, restoreOnStartup
+// 				}     
+//
+
+
+Switch Irrigation_Valve "Pump"           <faucet>    (All) 
+  { mqtt=">[mymqtt:cmnd/CAPTEUR_XXXXXX/POWER:command:*:default],
+          <[mymqtt:stat/CAPTEUR_XXXXXX/POWER:state:default]" }
+
+Number Soi_Moisture_set_point  "Soi Moisture [%.1f %%]" <water> (All)
+Number Chart_Soi_Moisture "Soi Moisture data"
+Number Soi_Moisture_Raw  "Soi Moisture [%.1f ]" <water>    (All) { mqtt="<[mymqtt:tele/CAPTEUR_XXXXXX_SOI/SENSOR:state:JSONPATH($.Analog0)]" }
+Number Soi_Moisture_sensor  "Water value [%.1f %%]" <water>        (All)
+
+

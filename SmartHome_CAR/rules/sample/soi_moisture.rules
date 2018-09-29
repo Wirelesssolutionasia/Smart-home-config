@@ -1,0 +1,41 @@
+rule "Update Soi Moisture sensor"
+when
+	Item Soi_Moisture_Raw changed
+then
+var high = 780 
+// High Calibation value
+var low = 380 
+// Low Calibation value
+var Ivalue = Soi_Moisture_Raw.state as Number
+var percentage = (high-Ivalue)/((high-low)/100)
+
+	logInfo("org.openhab", "Soi_Moisture sensor Percentage is " + percentage)
+	Soi_Moisture_sensor.postUpdate(percentage)
+
+end
+
+rule "Irrigation Watch Dog"
+when
+       Time cron "0 0/15 * * * ?"//every 15 mins
+then
+	if(Irrigation_Valve.state==ON){
+        Irrigation_Valve.sendCommand(OFF)
+  		ulinealert.sendCommand("Watch Dog ปิดน้ำ")
+	}
+end
+
+rule "Check Irrigation every 10 mins"
+when
+       Time cron "0 0/10 * * * ?"//every 10 mins
+then
+var Soi_Moisture_setpoint = Soi_Moisture.state as Number
+
+if(Soi_Moisture_sensor.state <= Soi_Moisture_set_point ){
+        Irrigation_Valve.sendCommand(ON)
+  		ulinealert.sendCommand("เปิดน้ำ")
+		logInfo("org.openhab", "Irrigation ON....")
+		Thread::sleep(120000) // 1000 milliseconds = 1 seconds 
+        Irrigation_Valve.sendCommand(OFF)
+  		ulinealert.sendCommand("ปิดน้ำ")
+	} 
+end
