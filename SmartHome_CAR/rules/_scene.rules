@@ -1,0 +1,51 @@
+rule "Scene_Item Event"
+when
+	Item Scene received command
+then
+	switch receivedCommand{
+		case 0:{ // Wakeup
+			ulinealert.sendCommand("โหมด: ตื่นนอน")
+			gLight.sendCommand(ON)
+			gPower.sendCommand(ON)
+		} 
+		case 1:{ // Sleep 
+			ulinealert.sendCommand("โหมด: เข้านอน")
+			gLight.sendCommand(OFF)
+			gPower.sendCommand(OFF)	
+
+		}
+		case 2:{ // Home
+			ulinealert.sendCommand("โหมด: ถึงบ้าน")
+			gPower.sendCommand(ON)
+		}
+		case 3:{ // Away
+			// Thread::sleep(350)
+			ulinealert.sendCommand("โหมด: ออกจากบ้าน")
+			gLight.sendCommand(OFF)
+			gPower.sendCommand(OFF)
+		}
+	}
+end
+rule "Siren Event"
+when
+        Item MyCarPresence changed from ON to OFF
+then
+
+			if ( Scene.state == 1 )
+			{
+				ulinealert.sendCommand("ตรวจสอบรถด่วน")
+				CAPTEUR_SIREN.sendCommand(ON)
+				Thread::sleep(3500)
+				CAPTEUR_SIREN.sendCommand(OFF)
+				Thread::sleep(3500)
+				CAPTEUR_SIREN.sendCommand(ON)
+				Thread::sleep(3500)
+				CAPTEUR_SIREN.sendCommand(OFF)
+				Thread::sleep(3500)
+				CAPTEUR_SIREN.sendCommand(ON)
+				Thread::sleep(3500)
+				CAPTEUR_SIREN.sendCommand(OFF)
+				ulinealert.sendCommand("ระบบหยุดการเตือนด้วยเสียง")
+			}
+end
+

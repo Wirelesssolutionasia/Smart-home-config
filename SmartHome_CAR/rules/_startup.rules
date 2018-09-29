@@ -1,0 +1,7 @@
+rule "Speedtest init"
+when
+    System started
+then
+executeCommandLine("miio remote")
+executeCommandLine("miio mac")
+end

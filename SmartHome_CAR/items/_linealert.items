@@ -1,0 +1,4 @@
+String ulinealert "User Line Alert" <light>
+{mqtt=">[track:/ci/smarthome/linealert/u/00AC3F34C0FF/alert:command:*:default]"}
+String glinealert "Group Line Alert" <light>
+{mqtt=">[track:/ci/smarthome/linealert/g/00AC3F34C0FF/alert:command:*:default]"}

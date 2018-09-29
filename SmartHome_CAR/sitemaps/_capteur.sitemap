@@ -1,0 +1,41 @@
+sitemap _capteur label="Capteur" {
+    Frame {
+      	Switch item=Scene label="โหมด" mappings=[0="ตื่นนอน", 1="เข้านอน"]
+      	Switch item=Scene label="โหมด" mappings=[2="ถึงบ้าน", 3="ออกจากบ้าน"]
+	   Switch item=gLight label="ไฟทั้งหมด" mappings=[ON="เปิด",OFF="ปิด"]
+           Group item=gLight label="ไฟ" 
+	   Switch item=gPower label="ปลั๊กทั้งหมด" mappings=[ON="เปิด",OFF="ปิด"]
+           Group item=gPower  label="ปลั๊ก" 
+//	   Switch item=gAirCon label="แอร์ทั้งหมด" mappings=[ON="เปิด",OFF="ปิด"]
+//         Group item=gAirCon  label="แอร์"
+	Text item=CAPTEUR_SIREN label="ไซเรน" {
+	Switch item=CAPTEUR_SIREN label="ไซเรน"
+	}
+    }
+    Frame label="รถ" {
+                Mapview item=MyCarLocation icon=movecontrol height=10 label="แผนที่"
+                Switch item=MyCarPresence label="รถ" mappings=[ON="อยู่บ้าน",OFF="ออกจากบ้าน"]
+                Text item=MyCarSpeed label="ความเร็ว"
+                Text item=MyCarDistance label="ห่างจากบ้าน" {
+                Text item=MyBoxId label="หมายเลขสมาชิก"
+                Text item=MyCarUniqueID label="หมายเลขกล่อง GPS"
+                Text item=MyCarLat label="ละจิจูด รถ"
+                Text item=MyCarLon label="ลองติจูด รถ"
+                Text item=MyCarHomeLat label="ละจิจูด บ้าน"
+                Text item=MyCarHomeLon label="ลองติจูด บ้าน"
+                Text item=MyCarCourse label="ทิศทาง"
+                Text item=MyCarSpeed label="ความเร็ว"
+                Text item=MyDistance label="ค่าระยะห่าง"
+                Text item=MyCarValid label="ความถูกต้อง"
+                Text item=MyCarLastUpdate label="ข้อมูลล่าสุด"
+                      }
+        }
+  Frame label="เกี่ยวกับ" {
+        Text label="Capteur Innovation Co.,Ltd" icon="location" {
+        Default item=About_US label="About Us"
+        Webview url="http://www.capteurinnovation.com" height=100
+        }
+  }
+
+}
+

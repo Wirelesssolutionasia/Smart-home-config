@@ -1,0 +1,15 @@
+Switch		MyCarPresence <garagedoor>
+DateTime 	MyCarLastUpdate 		"Last Update [%1$tY-%1$tm-%1$td  %1$tH:%1$tM]" <clock-on> 
+Location	MyCarLocation
+Number		MyCarUniqueID	"GPS BOX ID[%s] "    <car>
+String		MyCarValid "Valid [%s] "    <car>
+String		MyCarCourse "Course [%s องศา] "    <car>
+String		MyCarSpeed "Speed [%s กม/ชม] "    <car>
+Number		MyCarLat  "Car's Lat [Lat %.6f]" <car>
+Number		MyCarLon  "Car's Lon [Lon %.6f]" <car>
+Number		MyCarHomeLat "Home's Lat [Lat %.6f]" <car>
+Number		MyCarHomeLon "Home's Lon [Lon %.6f]" <car>
+String		MyBoxId "BOX [%s]" <car>
+Number		MyCarDistance "Car Distance [ %.3f กม]" <car>
+Number		MyDistance "Distance set [ %.3f กม]" <car>
+

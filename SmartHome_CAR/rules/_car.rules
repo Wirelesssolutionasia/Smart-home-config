@@ -1,0 +1,64 @@
+rule "Capteur Smart Car"
+  when 
+    Item MyCarRAW changed
+  then
+    val String json = (MyCarRAW.state as StringType).toString
+    val String valid = transform("JSONPATH", "$.Valid", json)
+        MyCarValid.postUpdate(valid)
+
+	if (valid == "true") {
+	val String clat  = transform("JSONPATH", "$.CLat", json)
+        MyCarLat.postUpdate(clat)
+	val String clon  = transform("JSONPATH", "$.CLon", json)
+        MyCarLon.postUpdate(clon)
+        
+	MyCarLocation.postUpdate(new PointType(clat + "," + clon))
+
+	val String uniqueId  = transform("JSONPATH", "$.UniqueId", json)
+        MyCarUniqueID.postUpdate(uniqueId)
+	val String course = transform("JSONPATH", "$.Course", json)
+        MyCarCourse.postUpdate(course)
+	val String speed= transform("JSONPATH", "$.Speed", json)
+        MyCarSpeed.postUpdate(speed)
+	val String HLat= transform("JSONPATH", "$.HLat", json)
+        MyCarHomeLat.postUpdate(HLat)
+	val String HLon= transform("JSONPATH", "$.HLon", json)
+        MyCarHomeLon.postUpdate(HLon)
+	val String BoxId= transform("JSONPATH", "$.BoxId", json)
+        MyBoxId.postUpdate(BoxId)
+	val String HomeDistance= transform("JSONPATH", "$.HomeDistance", json)
+        MyDistance.postUpdate(HomeDistance)
+	val String distance= transform("JSONPATH", "$.Distance", json)
+        MyCarDistance.postUpdate(distance)
+
+	val String Athome = transform("JSONPATH", "$.AtHome", json)
+			logInfo("capteur_smart_car.rules","AT HOME ="+ Athome)
+		if ( Athome == "YES") 
+		{
+			MyCarPresence.postUpdate(ON)
+			logInfo("capteur_smart_car.rules","CAR AT HOME")
+		} 
+		else
+		{
+			MyCarPresence.postUpdate(OFF)
+			logInfo("capteur_smart_car.rules","CAR OUTOF HOME")
+		}
+		MyCarLastUpdate.postUpdate(new DateTimeType)
+	   } else {
+		MyCarLastUpdate.postUpdate(new DateTimeType)
+   	   }
+end
+
+rule "Car Enter Home"
+  when
+    Item MyCarPresence changed from OFF to ON
+  then	
+		ulinealert.sendCommand("รถถึงบ้าน")
+	  	RfBridge_RfSend.sendCommand("#B7E234")
+end
+rule "Car Leave Home"
+  when
+    Item MyCarPresence changed from ON to OFF
+  then	
+		ulinealert.sendCommand("รถออกจากบ้าน")
+end
